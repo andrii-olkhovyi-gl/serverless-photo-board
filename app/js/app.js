@@ -19,7 +19,7 @@ function init() {
     });
 
     function setupBoard(id) {
-        board && board.destroyEl();
+        _clearBoard();
         var boardRef = fbDB.getBoardRef(id);
         var imagesStgRef = fbStg.getImagesRef(id);
         boardRef.once('value').then(function(snapshot) {
