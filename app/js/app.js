@@ -17,7 +17,7 @@ function init() {
     });
 
     function setupBoard(id) {
-        board && board.destroyEl();
+        _clearBoard();
         var boardRef = fbDB.getBoardRef(id);
         boardRef.once('value').then(function(snapshot) {
             var data = snapshot.val();
