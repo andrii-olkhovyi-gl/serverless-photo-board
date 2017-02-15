@@ -43,7 +43,7 @@ Card.prototype = {
         });
         if (this.uploadBtn) {
             this.uploadBtn.addEventListener('click', function() {
-                imageService(card).getFileData();
+                imageService(card).prepareAndUpload();
             });
         }
         this.parentBoard.boardEl.appendChild(this.cardEl);
@@ -55,12 +55,23 @@ Card.prototype = {
         this.data.position.x = x;
         this.data.position.y = y;
     },
-    addImage: function(fileData) {
+    toggleSpinner: function(val) {
+        if (val) {
+            this.uploadBtn && this.uploadBtn.parentNode.removeChild(this.uploadBtn);
+            this.loaderEl = document.createElement('div');
+            this.loaderEl.className = 'loader';
+            this.imgContEl.appendChild(this.loaderEl);
+        } else {
+            this.loaderEl.parentNode.removeChild(this.loaderEl);
+            this.loaderEl = null;
+        }
+    },
+    addImage: function(imageData) {
         var img = new Image();
-        img.src = fileData;
-        this.imgContEl.removeChild(this.uploadBtn);
+        img.src = imageData.url;
         this.imgContEl.appendChild(img);
-        this.data.imageUrl = fileData;
+        this.data.imageUrl = imageData.url;
+        this.data.imageName = imageData.name;
         this.parentBoard.save();
     }
 };

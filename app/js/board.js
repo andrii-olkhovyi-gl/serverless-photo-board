@@ -1,7 +1,8 @@
-function Board(data, ref) {
+function Board(data, ref, stgRef) {
     data = data || {cards:[]};
     this.data = data;
     this.ref = ref;
+    this.stgRef = stgRef;
     this.cards = [];
     this.boardEl = document.createElement('div');
     this.boardEl.className = 'board';
@@ -33,8 +34,12 @@ Board.prototype = {
     removeSelectedCard: function() {
         if (!this.selectedCard) return;
         var selectedId = this.selectedCard.id;
+        var fileName = this.selectedCard.data.imageName;
         this.data.cards = this.data.cards.filter(function(o){return o.id !== selectedId});
         this.cards = this.cards.filter(function(o){return o.id !== selectedId});
+        if (fileName) {
+            this.stgRef.child(fileName).delete();
+        }
         this.save();
         this.selectedCard.destroy();
         this.selectCard(null);

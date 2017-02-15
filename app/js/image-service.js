@@ -1,9 +1,9 @@
 function imageService(card) {
     return {
-        getFileData: getFileData
+        prepareAndUpload: prepareAndUpload
     };
 
-    function getFileData() {
+    function prepareAndUpload() {
         var fileSelector = document.createElement('input');
         fileSelector.setAttribute('type', 'file');
         fileSelector.onchange = function(ev) {
@@ -20,13 +20,20 @@ function imageService(card) {
         if (!isImage) {
             return alert('Please use image!')
         }
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-            var fileData = ev.target.result;
-            card.addImage(fileData);
-            reader = null;
-        };
-        reader.readAsDataURL(file);
+        _upload(file);
+    }
+
+    function _upload(file) {
+        var fileName = Date.now().toString();
+        card.toggleSpinner(true);
+        card.parentBoard.stgRef.child(fileName).put(file).then(function(snapshot) {
+            var imageData = {
+                url: snapshot.metadata.downloadURLs[0],
+                name: snapshot.metadata.name
+            };
+            card.addImage(imageData);
+            card.toggleSpinner(false);
+        });
     }
 
 }
