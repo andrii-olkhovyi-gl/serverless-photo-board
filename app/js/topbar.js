@@ -21,7 +21,7 @@ function Topbar() {
 
     function refreshUser(user) {
         topbar.className = user ? 'logged-in' : 'logged-out';
-        avatar.src = user ? user.photoURL : '';
-        username.innerHTML = user ? user.displayName : '';
+        avatar.src = user ? user.providerData[0].photoURL : '';
+        username.innerHTML = user ? user.providerData[0].displayName : '';
     }
 }

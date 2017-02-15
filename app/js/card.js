@@ -11,13 +11,13 @@ function Card(data, board) {
     imgContEl.className = 'img-container';
     cardEl.appendChild(imgContEl);
 
-    if (!data.imageUrl) {
+    if (!data.imageUrl && this.parentBoard.isOwner) {
         var uploadBtn = document.createElement('button');
         uploadBtn.className = 'btn btn-upload';
         uploadBtn.innerHTML = 'Upload image';
         imgContEl.appendChild(uploadBtn);
         this.uploadBtn = uploadBtn;
-    } else {
+    } else if (data.imageUrl) {
         var img = new Image();
         img.src = data.imageUrl;
         imgContEl.appendChild(img);

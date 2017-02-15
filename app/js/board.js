@@ -1,6 +1,7 @@
-function Board(data, ref, stgRef) {
+function Board(data, isOwner, ref, stgRef) {
     data = data || {cards:[]};
     this.data = data;
+    this.isOwner = isOwner;
     this.ref = ref;
     this.stgRef = stgRef;
     this.cards = [];
@@ -24,6 +25,14 @@ Board.prototype = {
         }
         return this;
     },
+    refreshCards: function(newData) {
+        this.data.cards = newData || [];
+        this.cards = [];
+        while (this.boardEl.lastChild) {
+            this.boardEl.removeChild(this.boardEl.lastChild);
+        }
+        this.drawAllCards(true);
+    },
     addCard: function(cardObj) {
         this.data.cards.push(cardObj);
         var card = new Card(cardObj, this);
@@ -46,6 +55,13 @@ Board.prototype = {
     },
     setListeners: function() {
         var board = this;
+
+        if (!this.isOwner) {
+            this.ref.child('cards').on('value', function(snapshot) {
+                board.refreshCards(snapshot.val());
+            });
+            return;
+        }
 
         this.boardEl.ondblclick = function(ev) {
             var x = ev.clientX - 150;
@@ -130,6 +146,7 @@ Board.prototype = {
     destroy: function() {
         this.boardEl.parentNode.removeChild(this.boardEl);
         this.boardEl = null;
+        this.ref.child('cards').off();
         document.onkeyup = null;
     }
 };

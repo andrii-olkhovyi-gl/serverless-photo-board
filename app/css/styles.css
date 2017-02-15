@@ -121,13 +121,13 @@ aside:hover {
     display: block;
     width: 100%;
     height: 50px;
-    padding: 5px 0;
+    padding: 5px;
     cursor: pointer;
     border-bottom: 1px solid #cccccc;
 }
 
 .user-item:hover {
-    background-color: #fdfdfd;
+    background-color: #f2f2f2;
 }
 
 .user-item img {

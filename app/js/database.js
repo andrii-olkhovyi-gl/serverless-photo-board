@@ -7,7 +7,8 @@ function FirebaseDB() {
     return {
         setupRefs: setupRefs,
         checkUserExists: checkUserExists,
-        getBoardRef: getBoardRef
+        getBoardRef: getBoardRef,
+        getUsersRef: getUsersRef
     };
 
     function setupRefs() {
@@ -24,6 +25,10 @@ function FirebaseDB() {
 
     function getBoardRef(id) {
         return boardsRef.child(id);
+    }
+
+    function getUsersRef() {
+        return usersRef;
     }
 
 }
