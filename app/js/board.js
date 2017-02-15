@@ -1,5 +1,7 @@
-function Board(data) {
+function Board(data, ref) {
+    data = data || {cards:[]};
     this.data = data;
+    this.ref = ref;
     this.cards = [];
     this.boardEl = document.createElement('div');
     this.boardEl.className = 'board';
@@ -118,7 +120,7 @@ Board.prototype = {
         return id + 1;
     },
     save: function() {
-        localStorage.setItem('board', JSON.stringify(this.data));
+        this.ref.update(this.data);
     },
     destroy: function() {
         this.boardEl.parentNode.removeChild(this.boardEl);

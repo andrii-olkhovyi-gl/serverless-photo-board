@@ -2,19 +2,29 @@ document.addEventListener('DOMContentLoaded', init, false);
 
 function init() {
     var topbar = Topbar();
-    var board, boardData, existingBoard;
+    var fbDB = FirebaseDB();
+    var board;
 
     firebase.auth().onAuthStateChanged(function(user) {
         topbar.refreshUser(user);
         if (user) {
-            existingBoard = JSON.parse(localStorage.getItem('board'));
-            boardData = existingBoard || {id:1, cards:[]};
-            board = new Board(boardData);
-            board.create().drawAllCards().setListeners();
+            fbDB.setupRefs();
+            fbDB.checkUserExists(user);
+            setupBoard(user.uid);
         } else {
             _clearBoard();
         }
     });
+
+    function setupBoard(id) {
+        board && board.destroyEl();
+        var boardRef = fbDB.getBoardRef(id);
+        boardRef.once('value').then(function(snapshot) {
+            var data = snapshot.val();
+            board = new Board(data, boardRef);
+            board.create().drawAllCards().setListeners();
+        });
+    }
 
     function _clearBoard() {
         board && board.destroy();
